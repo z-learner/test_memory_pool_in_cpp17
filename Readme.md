@@ -21,3 +21,5 @@ How to test cache missing ?
 ```bash
 perf stat -e cache-references,cache-misses ./test_memory_pool
 ```
+
+> 阅后即焚式的内存分配，单线程，相同大小的分配模式下，map_memory_pool总能得到相同的内存地址，pmr_memory_pool的地址是随机的，vector/malloc在一定时间内拿到的地址是唯一的
