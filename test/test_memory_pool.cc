@@ -9,6 +9,10 @@
 #include "memory_pool/map_memory_pool.hpp"
 #include "memory_pool/pmr_memory_pool.hpp"
 
+#define FIRST
+// #define SECOND
+// #define THIRD
+
 void pmr_memory_pool_work_thread(size_t malloc_size) {
   size_t count = 2000;
   while (count-- > 0) {
@@ -22,7 +26,16 @@ void pmr_memory_pool_work_thread(size_t malloc_size) {
     //   std::cout << "pmr_memory_pool memory pointer "
     //             << reinterpret_cast<size_t>(ptr) << std::endl;
     // }
+
+#ifdef FIRST
     std::memset(ptr, 0, malloc_size);
+#endif
+
+#ifdef SECOND
+    for (size_t index = 0; index < malloc_size; ++index) {
+      benchmark::DoNotOptimize(ptr[index]);
+    }
+#endif
 
     map_memory_pool::MemoryPool::GetMemoryPool().free(ptr, malloc_size);
   }
@@ -40,7 +53,16 @@ void map_memory_pool_work_thread(size_t malloc_size) {
     //   std::cout << "map_memory_pool memory pointer "
     //             << reinterpret_cast<size_t>(ptr) << std::endl;
     // }
+
+#ifdef FIRST
     std::memset(ptr, 0, malloc_size);
+#endif
+
+#ifdef SECOND
+    for (size_t index = 0; index < malloc_size; ++index) {
+      benchmark::DoNotOptimize(ptr[index]);
+    }
+#endif
 
     map_memory_pool::MemoryPool::GetMemoryPool().free(ptr, malloc_size);
   }
@@ -57,8 +79,15 @@ void malloc_work_thread(size_t malloc_size) {
     //   std::cout << "malloc memory pointer " << reinterpret_cast<size_t>(ptr)
     //             << std::endl;
     // }
-
+#ifdef FIRST
     std::memset(ptr, 0, malloc_size);
+#endif
+
+#ifdef SECOND
+    for (size_t index = 0; index < malloc_size; ++index) {
+      benchmark::DoNotOptimize(ptr[index]);
+    }
+#endif
 
     free(ptr);
   }
@@ -73,8 +102,15 @@ void vector_work_thread(size_t malloc_size) {
     //   std::cout << "vector memory pointer "
     //             << reinterpret_cast<size_t>(data.data()) << std::endl;
     // }
-
+#ifdef FIRST
     std::memset(data.data(), 0, malloc_size);
+#endif
+
+#ifdef SECOND
+    for (size_t index = 0; index < malloc_size; ++index) {
+      benchmark::DoNotOptimize(data.data()[index]);
+    }
+#endif
   }
 }
 
@@ -185,7 +221,7 @@ static void benchmark_vector_work_thread(benchmark::State& state) {
 }
 
 BENCHMARK(benchmark_map_memory_pool_work_thread);
-BENCHMARK(benchmark_pmr_memory_pool_work_thread);
+// BENCHMARK(benchmark_pmr_memory_pool_work_thread);
 BENCHMARK(benchmark_malloc_work_thread);
 BENCHMARK(benchmark_vector_work_thread);
 
