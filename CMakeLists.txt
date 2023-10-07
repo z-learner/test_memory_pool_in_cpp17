@@ -8,7 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(benchmark REQUIRED)
 
 include_directories(include)
-add_library( memory_pool "src/map_memory_pool.cc"  "src/pmr_memory_pool.cc")
+add_library( memory_pool "src/memory_pool/map_memory_pool.cc"  "src/memory_pool/pmr_memory_pool.cc")
+add_library( timer_manager "src/timer_manager/timer.cc"  "src/timer_manager/timer_manager.cc")
 
 add_executable( test_memory_pool "test/test_memory_pool.cc" )
 target_link_libraries(test_memory_pool pthread memory_pool benchmark)
