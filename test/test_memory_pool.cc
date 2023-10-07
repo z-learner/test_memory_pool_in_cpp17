@@ -9,8 +9,8 @@
 #include "memory_pool/map_memory_pool.hpp"
 #include "memory_pool/pmr_memory_pool.hpp"
 
-#define FIRST
-// #define SECOND
+// #define FIRST
+#define SECOND
 // #define THIRD
 
 void pmr_memory_pool_work_thread(size_t malloc_size) {
@@ -37,7 +37,7 @@ void pmr_memory_pool_work_thread(size_t malloc_size) {
     }
 #endif
 
-    map_memory_pool::MemoryPool::GetMemoryPool().free(ptr, malloc_size);
+    pmr_memory_pool::MemoryPool::GetMemoryPool().free(ptr, malloc_size);
   }
 }
 
@@ -221,7 +221,7 @@ static void benchmark_vector_work_thread(benchmark::State& state) {
 }
 
 BENCHMARK(benchmark_map_memory_pool_work_thread);
-// BENCHMARK(benchmark_pmr_memory_pool_work_thread);
+BENCHMARK(benchmark_pmr_memory_pool_work_thread);
 BENCHMARK(benchmark_malloc_work_thread);
 BENCHMARK(benchmark_vector_work_thread);
 

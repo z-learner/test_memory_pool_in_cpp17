@@ -12,6 +12,9 @@
 #pragma once
 #include <array>
 #include <memory_resource>
+#include <vector>
+
+#include "aligned_allocator/aligned_allocator.hpp"
 
 namespace pmr_memory_pool {
 
@@ -26,10 +29,7 @@ class MemoryPool {
   bool free(char* ptr, size_t memory_size);
 
  private:
-  MemoryPool()
-      : monotonic_resource(static_buff_.data(), static_buff_.size()),
-        pool_resource(&monotonic_resource),
-        allocator(&pool_resource) {}
+  MemoryPool();
   ~MemoryPool() = default;
 
   MemoryPool(const MemoryPool&) = delete;
@@ -38,14 +38,16 @@ class MemoryPool {
   MemoryPool& operator=(MemoryPool&&) = delete;
 
  private:
-  alignas(alignof(
-      std::max_align_t)) std::array<uint8_t, 20 * 1024 * 1024> static_buff_;
+  std::vector<uint8_t, aligned_allocator::AlignedAllocator<uint8_t, 64>>
+      internal_buff_;
 
-  std::pmr::monotonic_buffer_resource monotonic_resource;
+  std::unique_ptr<std::pmr::monotonic_buffer_resource> monotonic_resource_ptr{
+      nullptr};
 
-  std::pmr::synchronized_pool_resource pool_resource;
+  std::unique_ptr<std::pmr::synchronized_pool_resource> pool_resource_ptr{
+      nullptr};
 
-  std::pmr::polymorphic_allocator<char> allocator;
+  std::unique_ptr<std::pmr::polymorphic_allocator<char>> allocator_ptr{nullptr};
 };
 
 }  // namespace pmr_memory_pool

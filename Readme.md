@@ -10,21 +10,22 @@
 --------------------------------------------------------------------------------
 Benchmark                                      Time             CPU   Iterations
 --------------------------------------------------------------------------------
-benchmark_map_memory_pool_work_thread   16604361 ns       841918 ns          957
-benchmark_malloc_work_thread              661054 ns       540500 ns         1070
-benchmark_vector_work_thread             1354636 ns       897550 ns          779
+benchmark_map_memory_pool_work_thread   15156368 ns       754119 ns          907
+benchmark_pmr_memory_pool_work_thread    6078805 ns       700091 ns         1101
+benchmark_malloc_work_thread              702860 ns       542581 ns         1129
+benchmark_vector_work_thread             1287080 ns       835164 ns          859
 ```
 
-> benchmark_pmr_memory_pool_work_thread 无法运行完成（OOM killed）
 
 #### Release
 ``` bash
 --------------------------------------------------------------------------------
 Benchmark                                      Time             CPU   Iterations
 --------------------------------------------------------------------------------
-benchmark_map_memory_pool_work_thread    5293829 ns       650829 ns         1001
-benchmark_malloc_work_thread              551418 ns       466669 ns         1292
-benchmark_vector_work_thread              653284 ns       504335 ns         1399
+benchmark_map_memory_pool_work_thread    5070168 ns       797660 ns          889
+benchmark_pmr_memory_pool_work_thread    5302087 ns       850607 ns          830
+benchmark_malloc_work_thread              770752 ns       635075 ns         1040
+benchmark_vector_work_thread              810265 ns       640395 ns         1006
 ```
 
 
@@ -40,10 +41,10 @@ benchmark_vector_work_thread              653284 ns       504335 ns         1399
 --------------------------------------------------------------------------------
 Benchmark                                      Time             CPU   Iterations
 --------------------------------------------------------------------------------
-benchmark_map_memory_pool_work_thread   38856434 ns       778654 ns          100
-benchmark_pmr_memory_pool_work_thread   42743256 ns       978191 ns          100
-benchmark_malloc_work_thread            34493015 ns      1193394 ns          100
-benchmark_vector_work_thread            38920446 ns      1243032 ns          100
+benchmark_map_memory_pool_work_thread   36441833 ns       723525 ns          100
+benchmark_pmr_memory_pool_work_thread   33958285 ns       810413 ns          100
+benchmark_malloc_work_thread            31392803 ns       828437 ns          100
+benchmark_vector_work_thread            36029864 ns       947579 ns          100
 ```
 
 #### Release
@@ -51,9 +52,10 @@ benchmark_vector_work_thread            38920446 ns      1243032 ns          100
 --------------------------------------------------------------------------------
 Benchmark                                      Time             CPU   Iterations
 --------------------------------------------------------------------------------
-benchmark_map_memory_pool_work_thread    8452090 ns       913377 ns          896
-benchmark_malloc_work_thread             2062216 ns       665071 ns          958
-benchmark_vector_work_thread             2195356 ns       633343 ns         1115
+benchmark_map_memory_pool_work_thread    6371143 ns       692212 ns         1071
+benchmark_pmr_memory_pool_work_thread    5454846 ns       643017 ns         1130
+benchmark_malloc_work_thread             1797592 ns       557769 ns         1186
+benchmark_vector_work_thread             2070894 ns       548701 ns         1260
 ```
 > benchmark_pmr_memory_pool_work_thread 无法运行完成（OOM killed）
 
@@ -65,4 +67,5 @@ realse better when use mallic and vector
 perf stat -e cache-references,cache-misses ./test_memory_pool
 ```
 
+### additional information
 > 阅后即焚式的内存分配，单线程，相同大小的分配模式下，map_memory_pool总能得到相同的内存地址，pmr_memory_pool的地址是随机的，vector/malloc在一定时间内拿到的地址是唯一的
