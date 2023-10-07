@@ -1,0 +1,1 @@
+/usr/local/bin/c++ CMakeFiles/test_memory_pool.dir/test/test_memory_pool.cc.o -o test_memory_pool  -lpthread libmap_memory_pool.a -lbenchmark 

@@ -1,0 +1,4 @@
+/home/tusen/peng.zhang1/test_memory_pool_in_cpp17/build/CMakeFiles/rebuild_cache.dir
+/home/tusen/peng.zhang1/test_memory_pool_in_cpp17/build/CMakeFiles/edit_cache.dir
+/home/tusen/peng.zhang1/test_memory_pool_in_cpp17/build/CMakeFiles/test_memory_pool.dir
+/home/tusen/peng.zhang1/test_memory_pool_in_cpp17/build/CMakeFiles/map_memory_pool.dir
