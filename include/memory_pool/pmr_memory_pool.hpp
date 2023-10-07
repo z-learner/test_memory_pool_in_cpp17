@@ -9,6 +9,7 @@
  *
  */
 
+#pragma once
 #include <array>
 #include <memory_resource>
 
