@@ -7,6 +7,23 @@
 #include <thread>
 
 #include "memory_pool/map_memory_pool.hpp"
+#include "memory_pool/pmr_memory_pool.hpp"
+
+void pmr_memory_pool_work_thread(size_t malloc_size) {
+  size_t count = 2000;
+  while (count-- > 0) {
+    char* ptr =
+        pmr_memory_pool::MemoryPool::GetMemoryPool().malloc(malloc_size);
+    if (ptr == nullptr) {
+      std::cout << "Get nullptr from MemoryPool" << std::endl;
+    }
+    // std::cout << "map_memory_pool memory point "
+    //           << reinterpret_cast<size_t>(ptr) << std::endl;
+    std::memset(ptr, 0, malloc_size);
+
+    map_memory_pool::MemoryPool::GetMemoryPool().free(ptr, malloc_size);
+  }
+}
 
 void map_memory_pool_work_thread(size_t malloc_size) {
   size_t count = 2000;
@@ -53,6 +70,7 @@ void vector_work_thread(size_t malloc_size) {
 }
 
 static void benchmark_map_memory_pool_work_thread(benchmark::State& state) {
+  auto& init = map_memory_pool::MemoryPool::GetMemoryPool();
   for (auto _ : state) {
     std::thread thread0(&map_memory_pool_work_thread, 50);
     std::thread thread1(&map_memory_pool_work_thread, 50);
@@ -64,6 +82,33 @@ static void benchmark_map_memory_pool_work_thread(benchmark::State& state) {
     std::thread thread7(&map_memory_pool_work_thread, 500);
     std::thread thread8(&map_memory_pool_work_thread, 1000);
     std::thread thread9(&map_memory_pool_work_thread, 1000);
+
+    thread0.join();
+    thread1.join();
+    thread2.join();
+    thread3.join();
+    thread4.join();
+    thread5.join();
+    thread6.join();
+    thread7.join();
+    thread8.join();
+    thread9.join();
+  }
+}
+
+static void benchmark_pmr_memory_pool_work_thread(benchmark::State& state) {
+  auto& init = pmr_memory_pool::MemoryPool::GetMemoryPool();
+  for (auto _ : state) {
+    std::thread thread0(&pmr_memory_pool_work_thread, 50);
+    std::thread thread1(&pmr_memory_pool_work_thread, 50);
+    std::thread thread2(&pmr_memory_pool_work_thread, 100);
+    std::thread thread3(&pmr_memory_pool_work_thread, 100);
+    std::thread thread4(&pmr_memory_pool_work_thread, 100);
+    std::thread thread5(&pmr_memory_pool_work_thread, 500);
+    std::thread thread6(&pmr_memory_pool_work_thread, 500);
+    std::thread thread7(&pmr_memory_pool_work_thread, 500);
+    std::thread thread8(&pmr_memory_pool_work_thread, 1000);
+    std::thread thread9(&pmr_memory_pool_work_thread, 1000);
 
     thread0.join();
     thread1.join();
@@ -131,6 +176,7 @@ static void benchmark_vector_work_thread(benchmark::State& state) {
 }
 
 BENCHMARK(benchmark_map_memory_pool_work_thread);
+BENCHMARK(benchmark_pmr_memory_pool_work_thread);
 BENCHMARK(benchmark_malloc_work_thread);
 BENCHMARK(benchmark_vector_work_thread);
 
