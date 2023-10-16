@@ -9,7 +9,13 @@ find_package(benchmark REQUIRED)
 
 include_directories(include)
 add_library( memory_pool "src/memory_pool/map_memory_pool.cc"  "src/memory_pool/pmr_memory_pool.cc")
-add_library( timer_manager "src/timer_manager/timer.cc"  "src/timer_manager/timer_manager.cc")
+add_library( timer "src/timer/timer.cc")
 
 add_executable( test_memory_pool "test/test_memory_pool.cc" )
 target_link_libraries(test_memory_pool pthread memory_pool benchmark)
+
+add_executable( test_timer "test/test_timer.cc" )
+target_link_libraries(test_timer pthread timer benchmark)
+
+add_executable( test_timer_memory_pool "test/test_timer_memory_pool.cc" )
+target_link_libraries(test_timer_memory_pool pthread timer memory_pool benchmark)
