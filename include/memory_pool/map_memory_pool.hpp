@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <mutex>
+#include <shared_mutex>
 #include <unordered_map>
 #include <unordered_set>
 namespace map_memory_pool {
@@ -49,7 +50,7 @@ class MemoryPool {
   MemoryPool& operator=(MemoryPool&&) = delete;
 
  private:
-  std::mutex global_map_mutex_;
+  std::shared_mutex global_map_mutex_;
   std::mutex global_page_map_mutex_;
   std::unordered_map<size_t, std::unique_ptr<std::mutex>> memory_node_mutexs_;
   std::unordered_map<size_t, mem_node> memory_nodes_;

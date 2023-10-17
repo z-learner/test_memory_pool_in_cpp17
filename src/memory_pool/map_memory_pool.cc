@@ -28,8 +28,18 @@ size_t MemoryPool::get_memory_block_size(size_t mem_size) {
 
 char* MemoryPool::malloc(size_t memory_size) {
   auto memory_block_size = get_memory_block_size(memory_size);
+
+  bool is_has_node = true;
   {
-    std::lock_guard<std::mutex> lk(global_map_mutex_);
+    std::shared_lock<std::shared_mutex> lock(global_map_mutex_);
+    if (memory_nodes_.find(memory_block_size) == memory_nodes_.end()) {
+      is_has_node = false;
+    }
+  }
+
+  // double check
+  if (!is_has_node) {
+    std::unique_lock<std::shared_mutex> lock(global_map_mutex_);
     if (memory_nodes_.find(memory_block_size) == memory_nodes_.end()) {
       memory_nodes_.insert(std::make_pair(memory_block_size, mem_node()));
       memory_node_mutexs_.insert(
